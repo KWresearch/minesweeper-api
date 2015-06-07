@@ -19,4 +19,5 @@ get '/game' do
       }
     }
   })
+
 end
