@@ -1,13 +1,27 @@
 require_relative 'board'
-require 'SecureRandom'
+require_relative '../database'
+require          'SecureRandom'
 
 class Game
-  attr_accessor :id, :state, :board
+
+  attr_accessor :token, :board
 
   def initialize(difficulty = :beginner)
-    @difficulty = difficulty
-    @id = SecureRandom.hex 5
-    @state = :playing
-    @board = Board.new @difficulty
+    @token = SecureRandom.hex 5
+    @board = Board.new difficulty, @token
+    save_new_game
   end
+
+  def save_new_game
+    db = Database.new().connect
+    db.insert_one({
+      'game_id' => @token,
+      'board' => {
+        'tiles' => @board.tiles.map {|row| row.map(&:raw_data)},
+        'rows' => @board.rows,
+        'cols' => @board.cols
+      }
+    })
+  end
+  
 end
