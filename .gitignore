@@ -2,3 +2,5 @@
 vendor/
 env.json
 play.bash
+db/
+config.yaml
