@@ -1,5 +1,5 @@
 require_relative 'tile'
-#require 'json'
+require 'json'
 
 class Board
 
@@ -17,15 +17,34 @@ class Board
   def initialize(difficulty = :beginner, id)
     @id = id
     @rows, @cols, @mines = DIMENSIONS[difficulty]
-    setup
+    reset
+  end
+
+  def reset
+    @tiles = Array.new(@rows){|row| Array.new(@cols) {|col| Tile.new(row, col)}}
   end
 
   def setup
-    @tiles = Array.new(@rows){|row| Array.new(@cols) {|col| Tile.new(row, col)}}
-
     put_mines
     update_surrounding
-    save_state
+    #save_state
+  end
+
+  def load board
+    @rows, @cols = board[:rows], board[:cols]
+    board[:tiles].each do |row|
+      row.each do |tile|
+        @tiles[tile[:row]][tile[:col]] = Tile.load tile
+      end
+    end
+    self
+    #board[:tiles].each do |row|
+    #  row.each do |tile|
+    #    @board.tiles[]
+  #    end
+  #  end
+
+    #p board[:tiles][0]
   end
 
   def put_mines
@@ -41,7 +60,11 @@ class Board
   end
 
   def update_surrounding
-    @tiles.map {|row| row.map {|tile| tile.surroundings = surroundings(tile) }}
+    @tiles.map do |row|
+      row.map do |tile|
+        tile.surroundings = surroundings(tile)
+      end
+    end
   end
 
   def surroundings(tile)
@@ -57,20 +80,12 @@ class Board
     result
   end
 
+  def mine_at? x, y
+    @tiles[x][y].mined
+  end
+
   def in_range(x, y)
     x.between?(0, @rows-1) and y.between?(0, @cols-1)
-  end
-
-  def to_json(options)
-    {"joder" => [1, 2]}
-  end
-
-  def save_state
-
-  end
-
-  def reset
-    setup
   end
 
 end
