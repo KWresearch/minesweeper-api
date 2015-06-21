@@ -14,8 +14,7 @@ class Board
 
   # TODO: save the state using the token
 
-  def initialize(difficulty = :beginner, id)
-    @id = id
+  def initialize(difficulty = :beginner)
     @rows, @cols, @mines = DIMENSIONS[difficulty]
     reset
   end
@@ -86,6 +85,14 @@ class Board
 
   def in_range(x, y)
     x.between?(0, @rows-1) and y.between?(0, @cols-1)
+  end
+
+  def state
+    {
+      :tiles => @tiles,
+      :rows => @rows,
+      :cols => @cols
+    }
   end
 
 end

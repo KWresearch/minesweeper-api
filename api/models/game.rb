@@ -3,65 +3,60 @@ require_relative '../database'
 require 'SecureRandom'
 
 class Game
-  # TODO:
-  ## Reduce json boilerplate
-  ## Reduce board boilerplate
 
-  attr_accessor :game_id, :board, :difficulty
+  attr_accessor :game_id, :board, :difficulty, :status
 
-  def initialize(difficulty = :beginner)
-    @difficulty = difficulty
+  def initialize config
+    @difficulty = config[:difficulty] || :beginner
+    @game_id    = config[:game_id] || SecureRandom.hex(5)
+    @board      = Board.new @difficulty
+    @status     = 'playing'
+
+    # Load a previous game if needed
+    @board.load(config[:board]) if config[:board]
   end
 
   def setup
-    @game_id = SecureRandom.hex 5
-    @board = Board.new(difficulty, @token)
     @board.setup
     save
   end
 
+  # Save the state of the game
   def save
-    Database.instance.db.insert_one({
-      'game_id' => @game_id,
-      'difficulty' => @difficulty,
-      'board' => {
-        'tiles' => @board.tiles.map {|row| row.map(&:state)},
-        'rows' => @board.rows,
-        'cols' => @board.cols
-      }
-    })
+    Database.instance.db.insert_one state
   end
 
-  def load game_id
-    db = Database.instance.db
-    coll = db.find(:game_id => game_id).first
-
-    @game_id = coll[:game_id]
-    @difficulty = coll[:difficulty]
-    @board = Board.new(@difficulty, @game_id).load coll[:board]
+  # Load a previous saved game
+  def self.load game_id
+    Game.new Database.instance.db.find(:game_id => game_id).first
   end
 
   def reveal x, y
-    db = Database.instance.db
-    coll = db.find(:game_id => game_id).first
-
-    @game_id = coll[:game_id]
-    @difficulty = coll[:difficulty]
-    @board = Board.new(@difficulty, @game_id).load coll[:board]
-
-    if board.mine_at? x.to_i, y.to_i
-      status = 'game_over'
+    if @board.mine_at? x.to_i, y.to_i
+      @status = 'game_over'
     else
       #board.reveal x, y
-      status = 'playing'
     end
 
-    b = {:tiles => @board.tiles.map {|row| row.map(&:state)},:rows => @board.rows,:cols => @board.cols}
-
-    d = db.find(:game_id => game_id).find_one_and_update( {'$set' => {:status => status, :board => b }}, :return_document => :after)
-    puts "................"
-    puts d
+    update
   end
 
+  def update
+    Database.instance.db.find(:game_id => @game_id).find_one_and_update({
+      '$set' => state
+    })
+  end
 
+  def state
+    {
+      :game_id => @game_id,
+      :difficulty => @difficulty,
+      :status => @status,
+      :board => {
+        :tiles => @board.tiles.map {|row| row.map(&:state)},
+        :rows => @board.rows,
+        :cols => @board.cols
+      }
+    }
+  end
 end
