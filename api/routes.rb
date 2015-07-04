@@ -1,47 +1,49 @@
 require_relative 'models/game'
+require_relative 'helpers'
 require 'json'
 
-before do
-  content_type :json
-end
-
 # TODO GETs should be POSTs
-# TODO Implement reveal, for real
 
-# New game
+# Start a new game
 get '/game' do
   game = Game.new({:difficulty => params[:difficulty]})
-  game.setup
+  game.start
 
-  JSON.pretty_generate({
-    :status => 'success',
-    :data => {
-      :game_id => game.game_id,
-      :board   => game.board.state
-    }
-  })
+  created game
 end
 
-# Reveal (x, y): /board/game_id?x=x&y=y
+# Request an existing game
 get '/board/:game_id' do
-  # TODO sanitize input
-  #game = Game.new({})
   game = Game.load params[:game_id]
-  game.reveal params[:x], params[:y]
+  if game then success(game) else not_found end
+end
 
-  JSON.pretty_generate({
-    :status => 'success',
-    :data => {
-      :game_id => game.game_id,
-      :board   => game.board.state
-    }
-  })
+# Reveal a tile!
+# /board/game_id/reveal?row=row&col=col
+get '/board/:game_id/reveal' do
+  return bad_request if not valid_params? params
+
+  game = Game.load params[:game_id]
+  return not_found if not game
+
+  game.reveal params[:row], params[:col]
+
+  success game
 end
 
 # Put a flag
-get '/board/:game_id?flag' do
-  game = Game.load params[:game_id]
-  #game.board.put_flag :x, :y
+# /board/game:id/flag?row=row&col=col
+get '/board/:game_id/flag' do
+  return bad_request if not valid_params? params
 
-  # return response
+  game = Game.load params[:game_id]
+  return not_found if not game
+
+  game.put_flag params[:row], params[:col]
+
+  success game
+end
+
+before do
+  content_type :json
 end

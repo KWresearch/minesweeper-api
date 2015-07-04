@@ -2,25 +2,24 @@
 
 class Tile
 
-  attr_accessor :row, :col, :mined, :surroundings, :display, :flagged, :revealed
-
-  @@public_fields = %w[row col revealed display mined surroundings]
+  attr_accessor :row, :col, :mined, :surrounding_mines, :display, :flagged, :revealed
 
   def initialize(row, col)
     @row, @col = row, col
     @mined = false
     @revealed = false
     @flagged = false
-    @display = ''
-    @surroundings = 0
+    @display = ""
+    @surrounding_mines = 0
   end
 
   def self.load raw_tile
     tile = Tile.new raw_tile[:row], raw_tile[:col]
     tile.mined = raw_tile[:mined]
     tile.flagged = raw_tile[:flagged]
+    tile.display = raw_tile[:display]
     tile.revealed = raw_tile[:revealed]
-    tile.surroundings = raw_tile[:surroundings]
+    tile.surrounding_mines = raw_tile[:surrounding_mines]
 
     tile
   end
@@ -32,7 +31,8 @@ class Tile
       "mined" => @mined,
       "flagged" => @flagged,
       "revealed" => @revealed,
-      "surroundings" => @surroundings
+      "surrounding_mines" => @surrounding_mines,
+      :display => @display
     }
   end
 
