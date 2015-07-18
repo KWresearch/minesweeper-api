@@ -2,13 +2,12 @@ require_relative 'models/game'
 require_relative 'helpers'
 require 'json'
 
-# TODO GETs should be POSTs
+before do content_type :json end
 
 # Start a new game
 get '/game' do
   game = Game.new({:difficulty => params[:difficulty]})
   game.start
-
   created game
 end
 
@@ -18,32 +17,20 @@ get '/board/:game_id' do
   if game then success(game) else not_found end
 end
 
-# Reveal a tile!
-# /board/game_id/reveal?row=row&col=col
+# Reveal a tile: /board/game_id/reveal?row=row&col=col
 get '/board/:game_id/reveal' do
-  return bad_request if not valid_params? params
-
-  game = Game.load params[:game_id]
-  return not_found if not game
+  if not valid_params? params then return bad_request end
+  if not (game = Game.load(params[:game_id])) then return not_found end
 
   game.reveal params[:row], params[:col]
-
   success game
 end
 
-# Put a flag
-# /board/game:id/flag?row=row&col=col
+# Put a flag: /board/game:id/flag?row=row&col=col
 get '/board/:game_id/flag' do
-  return bad_request if not valid_params? params
-
-  game = Game.load params[:game_id]
-  return not_found if not game
+  if not valid_params? params then return bad_request end
+  if not (game = Game.load(params[:game_id])) then return not_found end
 
   game.put_flag params[:row], params[:col]
-
   success game
-end
-
-before do
-  content_type :json
 end
