@@ -4,12 +4,12 @@ class Tile
 
   attr_accessor :row, :col, :mined, :surrounding_mines, :display, :flagged, :revealed
 
-  def initialize(row, col)
+  def initialize row, col
     @row, @col = row, col
     @mined = false
     @revealed = false
     @flagged = false
-    @display = ""
+    @display = "."
     @surrounding_mines = 0
   end
 
@@ -22,6 +22,21 @@ class Tile
     tile.surrounding_mines = raw_tile[:surrounding_mines]
 
     tile
+  end
+
+  def set_as_revealed
+    @revealed = true
+    @display = @surrounding_mines
+  end
+
+  def reveal_mine
+    @revealed = true
+    @display = 'M'
+  end
+
+  def flagged=(flagged_)
+    @flagged = flagged_
+    if @flagged then @display = 'F' else @display = '.' end
   end
 
   def state
