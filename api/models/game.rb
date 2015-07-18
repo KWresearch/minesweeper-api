@@ -10,7 +10,7 @@ class Game
     @difficulty = config[:difficulty] || :beginner
     @game_id = config[:game_id] || SecureRandom.hex(5)
     @board = Board.new @difficulty
-    @status = 'Game created'
+    @status = config[:status] || 'Game created'
 
     # Load a previous game if needed
     @board.load(config[:board]) if config[:board]
@@ -43,30 +43,85 @@ class Game
 
   def reveal row, col
     row, col = row.to_i, col.to_i
+    update_required = true
 
-    # TODO: check flag[row][col]
-    if not @board.in_range row, col
-      @status = "#{row} and #{col} are not in the board"
-    elsif @board.mine_at? row, col
+    return if is_game_over or is_solved
+
+    if !@board.in_range row, col
+      @status = "Position #{row},#{col} out of board"
+      update_required = false
+
+    elsif @board.flagged? row, col
+      @status = "There is already a flag there!"
+      update_required = false
+
+    elsif @board.revealed? row, col
+      @status = "You already revealed that position"
+      update_required = false
+
+    elsif @board.mined? row, col
       @status = "Game over"
       finish
+
     else
       @board.reveal row, col
-      @status = "You revealed #{row}, #{col}"
+      @status = "You revealed position #{row}, #{col}"
+      if is_solved
+        @status = "You won"
+        @board.reveal_mines
+      end
     end
 
-    update
-    [@status, self]
+    update if update_required
   end
 
   def put_flag row, col
-    # TODO
+    row, col = row.to_i, col.to_i
+    update_required = true
+
+    return if is_game_over or is_solved
+
+    if !@board.in_range row, col
+      @status = "Postion #{row}, #{col} out of board"
+      update_required = false
+
+    elsif @board.flagged? row, col
+      @status = "Flag removed at #{row}, #{col}"
+      @board.put_flag row, col
+
+    elsif @board.revealed? row, col
+      @status = "You cannot put a flag there"
+      update_required = false
+
+    else
+      @status = "Flag put on #{row}, #{col}"
+      @board.put_flag row, col
+      if is_solved
+        @status = "You won"
+        @board.reveal_mines
+      end
+    end
+
+    update if update_required
   end
 
   # Game over!
   def finish
     @board.reveal_mines
     @status = 'Game over'
+  end
+
+  def is_game_over
+    @status == 'Game over'
+  end
+
+  def is_solved
+    @board.tiles.each do |row|
+      row.each do |tile|
+        return false if not (tile.revealed or tile.flagged) and not tile.mined
+      end
+    end
+    true
   end
 
   # The current state of the game
