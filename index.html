@@ -1,0 +1,72 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Minesweeper, an API">
+    <meta name="author" content="enrmarc">
+    <title>Minesweeper, an API</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h1>Minesweeper, an API</h1>
+      </div>
+
+      <!-- New game -->
+      <p class="lead">Start a new game </p>
+      <p><span class="label label-success">REQUEST</span></p>
+      <pre><code>GET /game</code></pre>
+      <p>
+        You can specifiy a difficulty: <code>/game?difficulty=beginnner|medium|advance</code>. If nothing <code>beginner</code> is taken.
+      </p>
+
+      <p><span class="label label-primary">RESPONSE</span></p>
+      <pre><code></code></pre>
+      <br>
+
+      <!-- Reveal a tile -->
+      <p class="lead">Reveal a tile</<p>
+      <pre><code>GET /board/:game_id/reveal?row=:row&col=:col</code></pre>
+      <p>
+        Where <code>:game_id</code> is the game's id returned in the previous call. As you can imagine, <code>:row</code> and <code>:col</code> are the tile positions (zero indexed).
+      </p>
+
+      <p><span class="label label-primary">RESPONSE</span></p>
+      <pre><code></code></pre>
+      <br>
+
+      <!-- Put a flag -->
+      <p class="lead">Put/remove a flag</<p>
+      <pre><code>GET /board/:game_id/flag?row=:row&col=:col</code></pre>
+      <p>
+        The same logic for the parameters as in the previous call.
+      </p>
+
+      <p><span class="label label-primary">RESPONSE</span></p>
+      <pre><code></code></pre>
+      <br>
+
+
+      <p class="lead">BLA BLA BLA.</p>
+      <p>Source code <a href="link">here</a>.</p>
+    </div>
+
+    <br>
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>
+
+  </body>
+</html>
