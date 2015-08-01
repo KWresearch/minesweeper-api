@@ -9,7 +9,7 @@ class Database
 
   def initialize
     @config = YAML::load_file File.join(__dir__, 'config/config.yaml')
-    @uri = @config[@config['mode']]['db']['uri']
+    @uri = ENV['DB_URI'] || @config[@config['mode']]['db']['uri']
     @db = Mongo::Client.new(@uri)[:games]
   end
 end
