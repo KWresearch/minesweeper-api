@@ -1,1 +1,0 @@
-bundle exec shotgun --server=thin config.ru
