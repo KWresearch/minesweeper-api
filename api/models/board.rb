@@ -11,11 +11,6 @@ class Board
     :advanced => [12, 12, 15] # TODO
   }
 
-  # TODO: PASS THNEM TO GAME AND THEN TO ROUTES
-  PASS = 1
-  MINED = 2
-  OK = 3
-
   SURROUND = [-1, 0, 1].product([-1, 0, 1]) - [[0, 0]]
 
   def initialize difficulty = :beginner

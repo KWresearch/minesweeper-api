@@ -41,23 +41,23 @@ class Tile
 
   def state
     {
-      "row" => @row,
-      "col" => @col,
-      "mined" => @mined,
-      "flagged" => @flagged,
-      "revealed" => @revealed,
-      "surrounding_mines" => @surrounding_mines,
+      :row => @row,
+      :col => @col,
+      :mined => @mined,
+      :flagged => @flagged,
+      :revealed => @revealed,
+      :surrounding_mines => @surrounding_mines,
       :display => @display
     }
   end
 
   def to_json(options)
     {
-      "row" => @row,
-      "col" => @col,
-      "revealed" => @revealed,
-      "display" => @display
+      :row => @row,
+      :col => @col,
+      :revealed => @revealed,
+      :display => @display
     }.to_json
-    state.to_json
+    #state.to_json
   end
 end
