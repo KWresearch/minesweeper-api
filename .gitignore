@@ -1,4 +1,3 @@
-.bundle
 vendor/
 env.json
 play.bash
