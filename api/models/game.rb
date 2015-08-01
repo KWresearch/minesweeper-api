@@ -98,17 +98,16 @@ class Game
       @board.put_flag row, col
       if is_solved
         @status = "You won"
-        @board.reveal_mines
+        finish
       end
     end
 
     update if update_required
   end
 
-  # Game over!
   def finish
     @board.reveal_mines
-    @status = 'Game over'
+    Database.instance.db.find(:game_id => @game_id).delete_one
   end
 
   def is_game_over
