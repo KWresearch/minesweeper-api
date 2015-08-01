@@ -1,6 +1,6 @@
 require_relative 'board'
 require_relative '../database'
-require 'SecureRandom'
+require 'securerandom'
 
 class Game
 
