@@ -6,7 +6,6 @@
     <meta name="description" content="Minesweeper, an API">
     <meta name="author" content="enrmarc">
     <title>Minesweeper, an API</title>
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/styles.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -17,56 +16,401 @@
   </head>
 
   <body>
-    <div class="container">
-      <div class="page-header">
-        <h1>Minesweeper, an API</h1>
+    <h1>Minesweeper, an HTTP API</h1>
+    <p>TL;DR &mdash; Like the game, but as an HTTP API.
+      You can check out the <em><a href="https://github.com/enrmarc/minesweeper-api">source code</a></em> and a basic
+    <em><a href="https://github.com/enrmarc/minesweeper-node-client">command line client</a></em> example.</p>
+    <div>
+      <!-- start a new game -->
+      <div class="resource">
+        <div class="section-title">Start a new game</div>
+
+        <div class="resource-header">
+          <span class="method">GET</span>
+          <span class="path">/game<span class="query">?difficulty=beginner</span></span>
+        </div>
+
+        <div class="resource-docs">
+          Starts a new game. If <code>difficulty</code> is not specified, it starts in beginner mode (3x3).
+        </div>
+
+        <div class="url-info">
+          <table>
+            <thead>
+              <tr><td>Query parameter</td><td>Expected Type</td><td>Possible values</td></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="url-info-key">difficulty</td>
+                <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
+                <td class="url-info-key">beginner, medium, hard</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="response-body">
+          <div class="body-title">Response Body (201 Created)</div>
+            <div class="body-contents">
+              <span class="json-object">{
+
+                <div class="json-fields">
+                  <div class="json-field">
+                    <span class="json-field-name">"status":</span>
+                    <span class="json-primitive-type">"Playing now",</span>
+                  </div>
+
+                  <div class="json-field">
+                    <span class="json-field-name">"data":</span>
+                      <span class="json-object">{</span>
+                      <div class="json-fields">
+                        <div class="json-field">
+                          <span class="json-field-name">"game_id":</span>
+                          <span class="json-primitive-type">2df73da661,</span>
+                        </div>
+                        <div class="json-field">
+                          <span class="json-field-name">"board":</span>
+                          <span class="json-object">{</span>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"tiles":</span>
+                                <span class="json-primitive-type">[</span>
+                              </div>
+                            </div>
+
+                            <div class="json-field">
+                              <div class="json-field">[
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":1,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":2,"revealed":false,"display":"."}</span>
+                                  </div>
+                                </div>],
+                              </div>
+
+                              <div class="json-field">[
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":1,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":2,"revealed":false,"display":"."}</span>
+                                  </div>
+                                </div>],
+                              </div>
+
+                              <div class="json-field">[
+
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":1,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":2,"revealed":false,"display":"."}</span>
+                                  </div>
+                                </div>]
+                              </div>],
+                            </div>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"rows":</span>
+                                <span class="json-primitive-type">3,</span>
+                              </div>
+                            </div>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"cols":</span>
+                                <span class="json-primitive-type">3</span>
+                              </div>
+                            </div>}
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </span>}
+            </div>
+        </div>
       </div>
 
-      <!-- New game -->
-      <p class="lead">Start a new game </p>
-      <p><span class="label label-success">REQUEST</span></p>
-      <pre><code>GET /game</code></pre>
-      <p>
-        You can specifiy a difficulty: <code>/game?difficulty=beginnner|medium|advance</code>. If nothing <code>beginner</code> is taken.
-      </p>
+      <!-- reveal a tile-->
+      <div class="resource">
+        <div class="section-title">Reveal a tile</div>
 
-      <p><span class="label label-primary">RESPONSE</span></p>
-      <pre><code></code></pre>
-      <br>
+        <div class="resource-header">
+          <span class="method">GET</span>
+          <span class="path">/board/{game_id}/reveal<span class="query">?row=row&col=col</span></span>
+        </div>
 
-      <!-- Reveal a tile -->
-      <p class="lead">Reveal a tile</<p>
-      <pre><code>GET /board/:game_id/reveal?row=:row&col=:col</code></pre>
-      <p>
-        Where <code>:game_id</code> is the game's id returned in the previous call. As you can imagine, <code>:row</code> and <code>:col</code> are the tile positions (zero indexed).
-      </p>
+        <div class="resource-docs">
+          Reveal a tile at position <code>row</code>, <code>col</code>, zero indexed. You must use the
+          <code>game_id</code> returned in the previous call.
+        </div>
 
-      <p><span class="label label-primary">RESPONSE</span></p>
-      <pre><code></code></pre>
-      <br>
+        <div class="url-info">
+          <table>
+            <thead>
+              <tr><td>Query parameter Key</td><td>Expected Type</td><td>Possible values</td></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="url-info-key">row</td>
+                <td class="url-info-expected-type"><span class="json-primitive-type">integer</span></td>
+                <td class="url-info-key">[0, 3|10|30]</td>
+              </tr>
+              <tr>
+                <td class="url-info-key">col</td>
+                <td class="url-info-expected-type"><span class="json-primitive-type">integer</span></td>
+                <td class="url-info-key">[0, 3|10|30]</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <!-- Put a flag -->
-      <p class="lead">Put/remove a flag</<p>
-      <pre><code>GET /board/:game_id/flag?row=:row&col=:col</code></pre>
-      <p>
-        The same logic for the parameters as in the previous call.
-      </p>
+        <div class="response-body">
+          <div class="body-title">Response Body (200 OK)</div>
+            <div class="body-contents">
+              <span class="json-object">{
 
-      <p><span class="label label-primary">RESPONSE</span></p>
-      <pre><code></code></pre>
-      <br>
+                <div class="json-fields">
+                  <div class="json-field">
+                    <span class="json-field-name">"status":</span>
+                    <span class="json-primitive-type">"You revealed position 1, 1",</span>
+                  </div>
+
+                  <div class="json-field">
+                    <span class="json-field-name">"data":</span>
+                      <span class="json-object">{</span>
+                      <div class="json-fields">
+                        <div class="json-field">
+                          <span class="json-field-name">"game_id":</span>
+                          <span class="json-primitive-type">2df73da661,</span>
+                        </div>
+                        <div class="json-field">
+                          <span class="json-field-name">"board":</span>
+                          <span class="json-object">{</span>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"tiles":</span>
+                                <span class="json-primitive-type">[</span>
+                              </div>
+                            </div>
+
+                            <div class="json-field">
+                              <div class="json-field">[
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":1,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":2,"revealed":false,"display":"."}</span>
+                                  </div>
+                                </div>],
+                              </div>
+
+                              <div class="json-field">[
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":1,"revealed":true,"display":"2"},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":2,"revealed":false,"display":"."}</span>
+                                  </div>
+                                </div>],
+                              </div>
+
+                              <div class="json-field">[
+
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":1,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":2,"revealed":false,"display":"."}</span>
+                                  </div>
+                                </div>]
+                              </div>],
+                            </div>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"rows":</span>
+                                <span class="json-primitive-type">3,</span>
+                              </div>
+                            </div>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"cols":</span>
+                                <span class="json-primitive-type">3</span>
+                              </div>
+                            </div>}
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </span>}
+            </div>
+        </div>
+      </div>
+
+      <!-- put/remove a flag -->
+      <div class="resource">
+        <div class="section-title">Put/remove a flag</div>
+
+        <div class="resource-header">
+          <span class="method">GET</span>
+          <span class="path">/board{game_id}/flag<span class="query">?row=row&col=col</span></span>
+        </div>
+
+        <div class="resource-docs">
+          Put or remove a flag in the given position. Similar to "reveal a tile".
+        </div>
+
+        <div class="url-info">
+          <table>
+            <thead>
+              <tr><td>Query parameter Key</td><td>Expected Type</td><td>Possible values</td></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="url-info-key">row</td>
+                <td class="url-info-expected-type"><span class="json-primitive-type">integer</span></td>
+                <td class="url-info-key">[0, 3|10|30]</td>
+              </tr>
+              <tr>
+                <td class="url-info-key">col</td>
+                <td class="url-info-expected-type"><span class="json-primitive-type">integer</span></td>
+                <td class="url-info-key">[0, 3|10|30]</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="response-body">
+          <div class="body-title">Response Body</div>
+            <div class="body-contents">
+              <span class="json-object">{
+
+                <div class="json-fields">
+                  <div class="json-field">
+                    <span class="json-field-name">"status":</span>
+                    <span class="json-primitive-type">"Flag put on 1, 2",</span>
+                  </div>
+
+                  <div class="json-field">
+                    <span class="json-field-name">"data":</span>
+                      <span class="json-object">{</span>
+                      <div class="json-fields">
+                        <div class="json-field">
+                          <span class="json-field-name">"game_id":</span>
+                          <span class="json-primitive-type">2df73da661,</span>
+                        </div>
+                        <div class="json-field">
+                          <span class="json-field-name">"board":</span>
+                          <span class="json-object">{</span>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"tiles":</span>
+                                <span class="json-primitive-type">[</span>
+                              </div>
+                            </div>
+
+                            <div class="json-field">
+                              <div class="json-field">[
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":1,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":0,"col":2,"revealed":false,"display":"."}</span>
+                                  </div>
+                                </div>],
+                              </div>
+
+                              <div class="json-field">[
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":1,"revealed":true,"display":"2"},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":1,"col":2,"revealed":false,"display":"F"}</span>
+                                  </div>
+                                </div>],
+                              </div>
+
+                              <div class="json-field">[
+
+                                <div class="json-fields">
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":0,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":1,"revealed":false,"display":"."},</span>
+                                  </div>
+                                  <div class="json-field">
+                                    <span class="json-field-name">{"row":2,"col":2,"revealed":false,"display":"."}</span>
+                                  </div>
+                                </div>]
+                              </div>],
+                            </div>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"rows":</span>
+                                <span class="json-primitive-type">3,</span>
+                              </div>
+                            </div>
+
+                            <div class="json-fields">
+                              <div class="json-field">
+                                <span class="json-field-name">"cols":</span>
+                                <span class="json-primitive-type">3</span>
+                              </div>
+                            </div>}
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </span>}
+            </div>
+        </div>
+      </div>
 
 
-      <p class="lead">BLA BLA BLA.</p>
-      <p>Source code <a href="link">here</a>.</p>
+
+
+
     </div>
-
-    <br>
-    <footer class="footer">
-      <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
-      </div>
-    </footer>
-
   </body>
 </html>

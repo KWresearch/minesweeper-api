@@ -1,39 +1,28 @@
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: #f5f5f5;
-}
+div.section-title { font-size: 20px; font-weight: bold; color:#0016AB; }
+div.resource-summary { font-family: monospace; padding-top: 10px; }
+.resource-summary div { padding-left: 15px }
 
+div.resource { border-bottom: 1px solid gray; padding-top: 5px; margin-top: 15px; }
+div.resource-header { font-family: monospace; font-size: 18px; font-weight: bold; padding-bottom: 15px; }
+div.resource-docs { padding-bottom: 20px; }
 
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
+div.url-info { padding-bottom: 20px; }
+div.url-info table { /*width: 600px;*/ border-spacing: 0px; }
+div.url-info thead td { border-bottom: 1px dashed gray; padding-right:8px; }
+.url-info-key { font-family: monospace; }
+.url-info-expected-type { font-family: monospace; }
 
-body > .container {
-  padding: 15px 15px 0;
-}
-.container .text-muted {
-  margin: 20px 0;
-}
+div.request-body { padding-bottom: 20px; }
+div.response-body { padding-bottom: 20px; }
 
-.footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
-}
+div.body-title { /*width: 600px;*/ border-bottom: 1px dashed gray; }
 
-code {
-  font-size: 80%;
-}
+div.body-contents { font-family: monospace; }
+div.json-field { padding-left: 15px; }
+span.json-field-name { font-weight: bold; }
+span.json-primitive-type { color: gray; }
+div.json-primitive-restrictions { color: gray; padding-left: 30px; }
+div.json-field-comment { color: gray; padding-left: 30px; }
+.query {color: gray;}
+.section-title {padding-bottom: 4px;}
+.response-body {word-wrap: break-word;}
