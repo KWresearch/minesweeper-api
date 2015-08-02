@@ -1,3 +1,9 @@
 dev:
    db:
-      uri: 'mongodb://127.0.0.1:27017/yourdatabasename'
+      uri: 'mongodb://127.0.0.1:27017/db_name'
+
+prod:
+  db:
+    uri: 'mongodb://user:password@host:33639/db_name'
+
+mode: 'dev'
