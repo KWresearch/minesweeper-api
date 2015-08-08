@@ -20,6 +20,10 @@
     <p>TL;DR &mdash; Like the game, but as an HTTP API.
       You can check out the <em><a href="https://github.com/enrmarc/minesweeper-api">source code</a></em> and a basic
     <em><a href="https://github.com/enrmarc/minesweeper-node-client">command line client</a></em> example.</p>
+    <p>Base URL: 
+      <a href="https://minesapi.herokuapp.com/game">https://minesapi.herokuapp.com/game</a>
+      (not available 24/7)
+    </p>
     <div>
       <!-- start a new game -->
       <div class="resource">
@@ -43,7 +47,7 @@
               <tr>
                 <td class="url-info-key">difficulty</td>
                 <td class="url-info-expected-type"><span class="json-primitive-type">string</span></td>
-                <td class="url-info-key">beginner, medium, hard</td>
+                <td class="url-info-key">beginner, intermediate, advanced</td>
               </tr>
             </tbody>
           </table>
@@ -169,12 +173,12 @@
               <tr>
                 <td class="url-info-key">row</td>
                 <td class="url-info-expected-type"><span class="json-primitive-type">integer</span></td>
-                <td class="url-info-key">[0, 3|10|30]</td>
+                <td class="url-info-key">[0, max_board_size]</td>
               </tr>
               <tr>
                 <td class="url-info-key">col</td>
                 <td class="url-info-expected-type"><span class="json-primitive-type">integer</span></td>
-                <td class="url-info-key">[0, 3|10|30]</td>
+                <td class="url-info-key">[0, max_board_size]</td>
               </tr>
             </tbody>
           </table>
@@ -299,12 +303,12 @@
               <tr>
                 <td class="url-info-key">row</td>
                 <td class="url-info-expected-type"><span class="json-primitive-type">integer</span></td>
-                <td class="url-info-key">[0, 3|10|30]</td>
+                <td class="url-info-key">[0, max_board_size]</td>
               </tr>
               <tr>
                 <td class="url-info-key">col</td>
                 <td class="url-info-expected-type"><span class="json-primitive-type">integer</span></td>
-                <td class="url-info-key">[0, 3|10|30]</td>
+                <td class="url-info-key">[0, max_board_size]</td>
               </tr>
             </tbody>
           </table>
