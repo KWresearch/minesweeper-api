@@ -2,3 +2,5 @@
 api/
 db/
 vendor/
+logs
+DOC.md
